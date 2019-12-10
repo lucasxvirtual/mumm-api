@@ -1,0 +1,5 @@
+*.pyc
+api/migrations
+db.sqlite3
+venv/
+.idea/
