@@ -14,6 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 
 # Quick-start development settings - unsuitable for production
@@ -27,10 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'user.User'
 
 # Application definition
 
 INSTALLED_APPS = [
+    'rest_framework.authtoken',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',

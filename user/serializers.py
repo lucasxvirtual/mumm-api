@@ -8,10 +8,10 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
         extra_kwargs = {'password': {'write_only': True}}
-        read_only_fields = ('id',)
+        read_only_fields = ('id', 'is_admin')
 
     def create(self, validated_data):
-        user = super(self).create(validated_data)
+        user = super(UserSerializer, self).create(validated_data)
         user.set_password(validated_data['password'])
         user.save()
 
@@ -22,4 +22,4 @@ class UserSerializer(serializers.ModelSerializer):
         if password:
             instance.set_password(password)
 
-        return super(self).update(instance, validated_data)
+        return super(UserSerializer, self).update(instance, validated_data)

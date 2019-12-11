@@ -42,7 +42,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser):
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     nickname = models.CharField(max_length=50, unique=True)
     is_admin = models.BooleanField(default=False)
     verified_email = models.BooleanField(default=False)
@@ -59,6 +59,8 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
+
+    REQUIRED_FIELDS = ['name', 'nickname']
 
     def get_full_name(self):
         return self.name

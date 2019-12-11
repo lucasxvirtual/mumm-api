@@ -75,8 +75,7 @@ class UserAdmin(BaseUserAdmin):
                        'forgot_password_expiration',
                        'is_deleted',
                        'feed_updated',
-                       'verified_email',
-                       'created_at')
+                       'verified_email')
         }),
         ('Permissions', {'fields': ('is_admin',)}),
     )

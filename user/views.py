@@ -1,6 +1,7 @@
 from rest_framework import viewsets
 from .serializers import *
 from .models import *
+from .permissions import *
 
 # Create your views here.
 

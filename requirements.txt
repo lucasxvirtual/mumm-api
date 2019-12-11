@@ -5,3 +5,4 @@ djangorestframework==3.10.3
 pytz==2019.3
 setuptools==39.1.0
 sqlparse==0.3.0
+Pillow==6.2.1
