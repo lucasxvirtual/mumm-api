@@ -1,0 +1,25 @@
+from .models import *
+from rest_framework import serializers
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = '__all__'
+        extra_kwargs = {'password': {'write_only': True}}
+        read_only_fields = ('id',)
+
+    def create(self, validated_data):
+        user = super(self).create(validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+
+        return user
+
+    def update(self, instance, validated_data):
+        password = validated_data.get('password', None)
+        if password:
+            instance.set_password(password)
+
+        return super(self).update(instance, validated_data)
