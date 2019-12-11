@@ -1,5 +1,5 @@
 *.pyc
-api/migrations
+*/migrations
 db.sqlite3
 venv/
 .idea/
