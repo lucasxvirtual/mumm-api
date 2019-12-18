@@ -1,4 +1,6 @@
-from rest_framework import viewsets, mixins, status, exceptions
+from rest_framework import viewsets, mixins
+from rest_framework.status import *
+from rest_framework.exceptions import *
 from rest_framework.response import *
 from rest_framework.permissions import *
 from .serializers import *
@@ -41,7 +43,7 @@ class UserHistoryViewSet(mixins.CreateModelMixin,
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer.data, status=HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -61,5 +63,5 @@ class BlockUserViewSet(mixins.CreateModelMixin,
 
     def perform_create(self, serializer):
         if serializer.validated_data['user'] == self.request.user:
-            raise exceptions.ValidationError("You can't block yourself")
+            raise ValidationError("You can't block yourself")
         serializer.save(owner=self.request.user)
