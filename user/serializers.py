@@ -23,3 +23,11 @@ class UserSerializer(serializers.ModelSerializer):
             instance.set_password(password)
 
         return super(UserSerializer, self).update(instance, validated_data)
+
+
+class UserHistorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = UserHistory
+        fields = '__all__'
+        read_only_fields = ('id', 'created_at')

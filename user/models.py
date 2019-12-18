@@ -80,3 +80,17 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+
+class UserHistory(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
+    updated_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now, editable=False)
+
+    class Meta:
+        unique_together = ['user', 'owner']
+
+    def update_history(self):
+        self.updated_at = timezone.now()
+        self.save()

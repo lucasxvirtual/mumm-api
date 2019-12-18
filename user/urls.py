@@ -7,6 +7,7 @@ from rest_framework.authtoken import views
 
 router = DefaultRouter()
 router.register(r'user', UserViewSet)
+router.register(r'user-history', UserHistoryViewSet)
 
 urlpatterns = [
     url(r'^auth/$', views.obtain_auth_token),
