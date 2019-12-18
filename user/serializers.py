@@ -31,3 +31,11 @@ class UserHistorySerializer(serializers.ModelSerializer):
         model = UserHistory
         fields = '__all__'
         read_only_fields = ('id', 'created_at')
+
+
+class BlockUserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BlockUser
+        fields = '__all__'
+        read_only_fields = ('id', 'created_at')

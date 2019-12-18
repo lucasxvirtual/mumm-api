@@ -83,8 +83,8 @@ class User(AbstractBaseUser):
 
 
 class UserHistory(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_history')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_history')
     updated_at = models.DateTimeField(default=timezone.now)
     created_at = models.DateTimeField(default=timezone.now, editable=False)
 
@@ -94,3 +94,13 @@ class UserHistory(models.Model):
     def update_history(self):
         self.updated_at = timezone.now()
         self.save()
+
+
+class BlockUser(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_block')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner_block')
+    created_at = models.DateTimeField(default=timezone.now, editable=False)
+
+    class Meta:
+        unique_together = ['user', 'owner']
+
