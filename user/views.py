@@ -6,6 +6,7 @@ from rest_framework.permissions import *
 from .serializers import *
 from .models import *
 from .permissions import *
+from django.db.models import Q
 
 # Create your views here.
 
@@ -19,6 +20,12 @@ class UserViewSet(viewsets.ModelViewSet):
         instance.is_deleted = True
         instance.save()
 
+    def get_queryset(self):
+        user = self.request.user
+        user_blocked = BlockUser.objects.filter(owner=user).values_list('user', flat=True)
+        user_blocked_by = BlockUser.objects.filter(user=user).values_list('owner', flat=True)
+        return self.queryset.exclude(Q(id__in=user_blocked) | Q(id__in=user_blocked_by))
+
 
 class UserHistoryViewSet(mixins.CreateModelMixin,
                          mixins.RetrieveModelMixin,
@@ -30,7 +37,11 @@ class UserHistoryViewSet(mixins.CreateModelMixin,
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return self.queryset.filter(owner=self.request.user).order_by('-updated_at')
+        user = self.request.user
+        user_blocked = BlockUser.objects.filter(owner=user).values_list('user', flat=True)
+        user_blocked_by = BlockUser.objects.filter(user=user).values_list('owner', flat=True)
+        return self.queryset.filter(owner=self.request.user)\
+            .exclude(Q(id__in=user_blocked) | Q(id__in=user_blocked_by)).order_by('-updated_at')
 
     def create(self, request, *args, **kwargs):
         data = request.data
