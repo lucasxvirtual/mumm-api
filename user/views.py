@@ -21,7 +21,11 @@ class UserViewSet(viewsets.ModelViewSet):
         instance.save()
 
     def get_queryset(self):
-        user = self.request.user
+        request = self.request
+        user = request.user
+        user_query = request.GET.get('user', None)
+        if user_query == 'self':
+            return self.queryset.filter(pk=user.id)
         user_blocked = BlockUser.objects.filter(owner=user).values_list('user', flat=True)
         user_blocked_by = BlockUser.objects.filter(user=user).values_list('owner', flat=True)
         return self.queryset.exclude(Q(id__in=user_blocked) | Q(id__in=user_blocked_by))
