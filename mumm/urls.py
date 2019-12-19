@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 from user import urls as user_urls
+from story import urls as story_urls
 
 urlpatterns = [
     url(r'^user-app/', include(user_urls)),
+    url(r'^story-app/', include(story_urls)),
     path('admin/', admin.site.urls),
 ]
