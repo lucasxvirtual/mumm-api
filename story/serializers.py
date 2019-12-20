@@ -8,3 +8,11 @@ class StorySerializer(serializers.ModelSerializer):
         model = Story
         fields = '__all__'
         read_only_fields = ('id', 'created_at')
+
+
+class StoryHistorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = StoryHistory
+        fields = '__all__'
+        read_only_fields = ('id', 'created_at')

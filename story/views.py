@@ -1,6 +1,8 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, mixins
 from rest_framework.response import *
 from rest_framework.decorators import action
+from rest_framework.status import *
+from rest_framework.permissions import *
 from .serializers import *
 from .models import *
 from .permissions import *
@@ -61,3 +63,32 @@ class StoryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class StoryHistoryViewSet(mixins.CreateModelMixin,
+                          mixins.RetrieveModelMixin,
+                          mixins.DestroyModelMixin,
+                          mixins.ListModelMixin,
+                          viewsets.GenericViewSet):
+    queryset = StoryHistory.objects.all()
+    serializer_class = StoryHistorySerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user).order_by('-updated_at')
+
+    def create(self, request, *args, **kwargs):
+        data = request.data
+        already_in_history = self.get_queryset().filter(user=data['user'])
+        if already_in_history:
+            already_in_history[0].update_history()
+            serializer = self.get_serializer(already_in_history[0])
+        else:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

@@ -36,3 +36,10 @@ class Story(models.Model):
         self.save()
         Story.objects.filter(pk=old_id).update(last_version=False)
         return self
+
+
+class StoryHistory(models.Model):
+    story = models.ForeignKey(Story, on_delete=models.CASCADE)
+    user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    updated_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now, editable=False)

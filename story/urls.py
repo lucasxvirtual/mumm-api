@@ -6,6 +6,7 @@ from django.urls import path
 
 router = DefaultRouter()
 router.register(r'story', StoryViewSet)
+router.register(r'story-history', StoryViewSet)
 
 urlpatterns = [
     path('', include(router.urls))
